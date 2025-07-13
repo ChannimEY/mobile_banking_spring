@@ -1,26 +1,19 @@
 package kh.edu.cstad.mbapi.mapper;
 
 import kh.edu.cstad.mbapi.domain.Customer;
+import kh.edu.cstad.mbapi.dto.CreateCustomerRequest;
 import kh.edu.cstad.mbapi.dto.CustomerResponse;
-//import org.mapstruct.Mapper;
-//
-//@Mapper(componentModel = "spring")
+import kh.edu.cstad.mbapi.dto.UpdateCustomerRequest;
+import org.mapstruct.*;
 
+@Mapper(componentModel = "spring")
 public interface CustomerMapper {
-
-    void toCustomerPartailly(
-
-
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void toCustomerPartially(
+            UpdateCustomerRequest updateCustomerRequest,
+            @MappingTarget Customer customer
     );
 
-    //DTO -> Model
-    //Model -> DTO
-    //what is source data? (parameter)
-    //what is target data? (return_type)
-
-    CustomerResponse mapCustomerToCustomerResponse(Customer customer);
-
-//    Customer formCreateCustomerRequest(CreateCustomerRequest customerResponse);
-
+    CustomerResponse toCustomerResponse(Customer customer);
+    Customer fromCreateCustomerRequest(CreateCustomerRequest createCustomerRequest);
 }
-

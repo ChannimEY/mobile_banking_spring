@@ -3,6 +3,8 @@ package kh.edu.cstad.mbapi.service.Impl;
 import kh.edu.cstad.mbapi.domain.Customer;
 import kh.edu.cstad.mbapi.dto.CreateCustomerRequest;
 import kh.edu.cstad.mbapi.dto.CustomerResponse;
+import kh.edu.cstad.mbapi.dto.UpdateCustomerRequest;
+import kh.edu.cstad.mbapi.mapper.CustomerMapper;
 import kh.edu.cstad.mbapi.repository.CustomerRepository;
 import kh.edu.cstad.mbapi.service.CustomerService;
 import lombok.RequiredArgsConstructor;
@@ -21,16 +23,32 @@ import java.util.List;
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
+    private  final CustomerMapper customerMapper;
+
+
+    @Override
+    public CustomerResponse updateByPhoneNumber(String phoneNumber, UpdateCustomerRequest updateCustomerRequest) {
+        Customer customer =customerRepository
+                .findByPhoneNumber(phoneNumber)
+                .orElseThrow(()->
+                        new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                "Customer phone number not found"
+                        ));
+        customerMapper.toCustomerPartially(
+                updateCustomerRequest,
+                customer
+        );
+
+        customer=customerRepository.save(customer);
+        return customerMapper.toCustomerResponse(customer);
+    }
 
     @Override
     public CustomerResponse findByPhoneNumber(String phoneNumber) {
         return customerRepository
                 .findByPhoneNumber(phoneNumber)
-                .map(customer -> CustomerResponse.builder()
-                        .fullName(customer.getFullname())
-                        .gender(customer.getGender())
-                        .email(customer.getEmail())
-                        .build())
+                .map(customerMapper::toCustomerResponse)
                 .orElseThrow(
                         ()->new ResponseStatusException(HttpStatus.NOT_FOUND)
                 );
@@ -40,12 +58,7 @@ public class CustomerServiceImpl implements CustomerService {
     public List<CustomerResponse> findAll() {
         List<Customer> customers=customerRepository.findAll();
         return customers.stream()
-                .map(customer ->
-                        CustomerResponse.builder()
-                                .fullName(customer.getFullname())
-                                .gender(customer.getGender())
-                                .email(customer.getEmail())
-                                .build())
+                .map(customerMapper::toCustomerResponse)
                 .toList();
 
 
@@ -68,22 +81,13 @@ public class CustomerServiceImpl implements CustomerService {
             );
         }
 
-        Customer customer = new Customer();
-        customer.setFullname(createCustomerRequest.fullname());
-        customer.setGender(createCustomerRequest.gender());
-        customer.setEmail(createCustomerRequest.email());
-        customer.setPhoneNumber(createCustomerRequest.phoneNumber());
-        customer.setRemark(createCustomerRequest.remark());
+        Customer customer = customerMapper.fromCreateCustomerRequest(createCustomerRequest);
         customer.setIsDelete(false);
 
         log.info("Customer Id before save : {}", customer.getId());
         customer = customerRepository.save(customer);
         log.info("Customer id after save: {}", customer.getId());
 
-        return CustomerResponse.builder()
-                .fullName(customer.getFullname())
-                .gender(customer.getGender())
-                .email(customer.getEmail())
-                .build();
+        return customerMapper.toCustomerResponse(customer);
     }
 }

@@ -1,7 +1,7 @@
 package kh.edu.cstad.mbapi.dto;
 
 public record CreateCustomerRequest(
-        String fullname,
+        String fullName,
         String gender,
         String email,
         String phoneNumber,

@@ -18,7 +18,7 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  Integer id;
     @Column(nullable = false, length = 100)
-    private String fullname;
+    private String fullName;
 
     @Column(nullable = false, length = 10)
     private  String gender;
@@ -40,5 +40,6 @@ public class Customer {
 
     @OneToOne(mappedBy = "customer")
     private  KYC kyc;
+
 
 }
