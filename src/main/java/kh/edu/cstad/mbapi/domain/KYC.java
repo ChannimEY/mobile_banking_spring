@@ -1,14 +1,17 @@
 package kh.edu.cstad.mbapi.domain;
 
 import jakarta.persistence.*;
-        import lombok.Getter;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import jakarta.persistence.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
+
 public class KYC {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

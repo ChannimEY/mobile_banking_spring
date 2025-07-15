@@ -18,7 +18,7 @@ public class AccountType {
     private Integer id;
 
     @Column(nullable = false, unique = true, length = 50)
-    private String name;  // e.g., PAYROLL, SAVING, etc.
+    private String typeName;  // e.g., PAYROLL, SAVING, etc.
 
     @Column(nullable = false)
     private Boolean isDeleted;

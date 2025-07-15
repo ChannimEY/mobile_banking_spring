@@ -4,7 +4,8 @@ import java.math.BigDecimal;
 
 public record UpdateAccountRequest(
         String accNum,
-        BigDecimal overLimit
+        BigDecimal overLimit,
+        Integer accountTypeId
 
 ) {
 }

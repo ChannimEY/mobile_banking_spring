@@ -10,14 +10,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/accounts")
+@RequestMapping("/api/accounts")
 @RequiredArgsConstructor
+@Validated
 public class AccountController {
+
     private final AccountService accountService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public AccountResponse create(@RequestBody @Validated CreateAccountRequest request) {
+    public AccountResponse createAccount(@RequestBody @Validated CreateAccountRequest request) {
         return accountService.create(request);
     }
 
@@ -31,26 +33,25 @@ public class AccountController {
         return accountService.findByAccNum(accNum);
     }
 
-    @GetMapping("/by-customer/{customerId}")
+    @GetMapping("/customer/{customerId}")
     public List<AccountResponse> findByCustomer(@PathVariable Integer customerId) {
         return accountService.findByCustomer(customerId);
     }
 
     @DeleteMapping("/{accNum}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteByAccNum(@PathVariable String accNum) {
         accountService.deleteByAccNum(accNum);
     }
 
     @PatchMapping("/{accNum}")
-    public AccountResponse updateByAccNum(
-            @PathVariable String accNum,
-            @RequestBody @Validated UpdateAccountRequest request
-    ) {
+    public AccountResponse updateByAccNum(@PathVariable String accNum, @RequestBody UpdateAccountRequest request) {
         return accountService.updateByAccNum(accNum, request);
     }
 
-    @PutMapping("/{accNum}/disable")
-    public void disableAccount(@PathVariable String accNum) {
+    @PatchMapping("/{accNum}/disable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void disableByAccNum(@PathVariable String accNum) {
         accountService.disableByAccNum(accNum);
     }
 }
