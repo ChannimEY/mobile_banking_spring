@@ -15,7 +15,7 @@ public class ServiceException {
             ResponseStatusException e, HttpServletRequest request
 
     ){
-        ErrorResponse<?> error =ErrorResponse.builder()
+          ErrorResponse<?> error =ErrorResponse.builder()
                 .message("Service Business Logic Error")
                 .code(e.getStatusCode().value())
                 .timestamp(LocalDateTime.now())

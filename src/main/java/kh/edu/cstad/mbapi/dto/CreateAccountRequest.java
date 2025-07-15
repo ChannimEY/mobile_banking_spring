@@ -5,7 +5,8 @@ import java.math.BigDecimal;
 public record CreateAccountRequest(
          String accNum,
         BigDecimal overLimit,
-         Integer customerId
+         Integer   customerId,
+         Integer accountTypeId
 
 ) {
 }

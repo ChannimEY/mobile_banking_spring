@@ -11,18 +11,20 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name="transaction_types")
-public class TransactionType {
+@Table(name = "customer_segments")
+public class CustomerSegment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    @Column(nullable = false, unique = true, length = 50)
-    private String name;  // e.g., PAYMENT, TRANSFER,
-
+    private  String segment;
+    private String description;
 
     @Column(nullable = false)
     private Boolean isDeleted;
-    @OneToMany(mappedBy = "transactionType")
-    private List<Transaction> transactionList;
+
+    @OneToMany(mappedBy = "customerSegment")
+    private List<Customer> customerList;
+
+
+
 }

@@ -32,14 +32,17 @@ public class Customer {
     private String remark;
 
     @Column(nullable = false)
-    private Boolean isDelete;
+    private Boolean isDeleted;
 
     @OneToMany (mappedBy = "customer")
 //    @JoinColumn(name = "cust_id",referencedColumnName = "customer_id") change col name
    private List<Account> accounts;
 
-    @OneToOne(mappedBy = "customer")
+    @OneToOne(mappedBy = "customer",optional = false)
     private  KYC kyc;
+
+    @ManyToOne(optional = false)
+    private  CustomerSegment customerSegment ;
 
 
 }

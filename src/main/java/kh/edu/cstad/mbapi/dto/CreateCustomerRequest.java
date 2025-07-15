@@ -5,7 +5,9 @@ public record CreateCustomerRequest(
         String gender,
         String email,
         String phoneNumber,
-        String remark
+        String remark,
+        String nationalCardId,
+        Integer customerSegmentId
 
 ) {
 }

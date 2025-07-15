@@ -7,7 +7,8 @@ import java.math.BigDecimal;
 @Builder
 public record AccountResponse(
         String accNum,
-        BigDecimal overLimit,
-        String customerName
+        String customerName,
+        String accountTypeName,
+        BigDecimal overLimit
 ) {}
 

@@ -7,26 +7,26 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
+@Table(name = "transactions")
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
-//    @JoinColumn(name = "transaction_type_id")
+    @ManyToOne(optional = false)
+
     private TransactionType transactionType;
 
-    @ManyToOne
-//    @JoinColumn(name = "sender_id")
+    @ManyToOne(optional = false)
     private Account sender;
 
-    @ManyToOne
-//    @JoinColumn(name = "receiver_id")
+    @ManyToOne(optional = false)
     private Account receiver;
 
     @Column(nullable = false)
@@ -35,4 +35,7 @@ public class Transaction {
     private String remark;
 
     private LocalDateTime timestamp;
+    @Column(nullable = false)
+    private Boolean isDeleted;
+
 }

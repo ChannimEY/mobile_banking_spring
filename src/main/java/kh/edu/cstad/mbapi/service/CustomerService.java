@@ -7,6 +7,8 @@ import kh.edu.cstad.mbapi.dto.UpdateCustomerRequest;
 import java.util.List;
 
 public interface CustomerService {
+    void disableByPhoneNumber(String phoneNumber);
+
     CustomerResponse updateByPhoneNumber(String phoneNumber,
                                          UpdateCustomerRequest updateCustomerRequest);
     CustomerResponse findByPhoneNumber(String phoneNumber);

@@ -6,6 +6,7 @@ import kh.edu.cstad.mbapi.domain.Customer;
 import kh.edu.cstad.mbapi.dto.*;
 import kh.edu.cstad.mbapi.mapper.AccountMapper;
 import kh.edu.cstad.mbapi.repository.AccountRepository;
+import kh.edu.cstad.mbapi.repository.AccountTypeRepository;
 import kh.edu.cstad.mbapi.repository.CustomerRepository;
 import kh.edu.cstad.mbapi.service.AccountService;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -22,22 +25,39 @@ public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepo;
     private final CustomerRepository customerRepo;
     private final AccountMapper accountMapper;
+    private final AccountTypeRepository accountTypeRepository;
 
     @Override
     public AccountResponse create(CreateAccountRequest request) {
         Customer customer = customerRepo.findById(request.customerId())
-                .orElseThrow(() ->
-                        new ResponseStatusException(
-                                HttpStatus.NOT_FOUND,
-                                "Customer not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found"));
 
+        AccountType accountType = accountTypeRepository.findById(request.accountTypeId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account type not found"));
 
-
-        Account account = accountMapper.fromCreateAccountRequest(request);
+        Account account = new Account();
         account.setCustomer(customer);
+        account.setAccountType(accountType);
+        account.setAccNum(generateAccountNumber());
         account.setIsDeleted(false);
 
+
+        String segment = customer.getCustomerSegment().getSegment().toUpperCase();
+        account.setOverLimit(getLimitBySegment(segment));
+
         return accountMapper.toAccountResponse(accountRepo.save(account));
+    }
+
+    private String generateAccountNumber() {
+        return "ACC-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+    }
+
+    private BigDecimal getLimitBySegment(String segment) {
+        return switch (segment) {
+            case "GOLD" -> BigDecimal.valueOf(50000);
+            case "SILVER" -> BigDecimal.valueOf(10000);
+            default -> BigDecimal.valueOf(5000);
+        };
     }
 
     @Override

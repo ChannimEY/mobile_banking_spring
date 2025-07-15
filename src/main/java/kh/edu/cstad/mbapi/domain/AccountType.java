@@ -5,10 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
+@Table(name = "account_types")
 public class AccountType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,6 +20,10 @@ public class AccountType {
     @Column(nullable = false, unique = true, length = 50)
     private String name;  // e.g., PAYROLL, SAVING, etc.
 
-    @Column(length = 255)
-    private String description;
+    @Column(nullable = false)
+    private Boolean isDeleted;
+
+    @OneToMany(mappedBy = "accountType")
+    @Column(nullable = true)
+    private List<Account> accounts;
 }
