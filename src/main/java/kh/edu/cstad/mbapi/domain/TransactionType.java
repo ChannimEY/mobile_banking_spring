@@ -5,18 +5,24 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
+@Table(name = "transaction_types")
 public class TransactionType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false, unique = true, length = 50)
-    private String name;  // e.g., PAYMENT, TRANSFER,
+    @Column(nullable = false,  unique = true, length = 100)
+    private String type;
 
-    @Column(length = 255)
-    private String description;
+    @Column(nullable = false)
+    private Boolean isDeleted;
+
+    @OneToMany(mappedBy = "transactionType")
+    private List<Transaction> transactions;
 }

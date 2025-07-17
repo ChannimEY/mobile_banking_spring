@@ -10,9 +10,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 public class KYC {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String uuid;
+    private Integer id;
 
     @Column(unique = true,nullable = false,length = 13)
     private  String nationalCardId;
@@ -23,8 +23,11 @@ public class KYC {
     @Column(nullable = false)
     private Boolean isDeleted;
 
-    @OneToOne
-    private  Customer customer;
+    @OneToOne(optional = false)
+    @MapsId
+    @JoinColumn(name = "cust_id")
+    private Customer customer;
+
 
 
 

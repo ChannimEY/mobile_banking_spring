@@ -7,11 +7,11 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring")
 public interface AccountMapper {
 
-    Account fromCreateAccountRequest(CreateAccountRequest createAccountRequest);
+//    Account fromCreateAccountRequest(CreateAccountRequest createAccountRequest);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void toCustomerPartially(UpdateAccountRequest updateAccountRequest, @MappingTarget Account account);
 
-    @Mapping(target = "customerName", source = "customer.fullName")
+    @Mapping(source = "accountType.type", target = "accountType")
     AccountResponse toAccountResponse(Account account);
 }

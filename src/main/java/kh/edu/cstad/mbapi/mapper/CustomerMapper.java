@@ -15,5 +15,7 @@ public interface CustomerMapper {
     );
 
     CustomerResponse toCustomerResponse(Customer customer);
+
+    @Mapping(target = "customerSegment", ignore = true)
     Customer fromCreateCustomerRequest(CreateCustomerRequest createCustomerRequest);
 }
